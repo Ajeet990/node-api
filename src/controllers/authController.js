@@ -9,7 +9,6 @@ import {
 import responseHandler from '../utils/responseHandler.js';
 import { CODE } from "../config/statusCodes/codes.js";
 import { AUTH_MESSAGES } from "../config/messages/authMessages.js";
-// import { logError } from '../services/errorLogService.js';
 import { logError } from "../services/error/errorLogService.js";
 
 async function loginUser(req, res) {
@@ -26,10 +25,7 @@ async function loginUser(req, res) {
     responseHandler.success(res, {
       statusCode: CODE.SUCCESS,
       message: AUTH_MESSAGES.LOGIN_SUCCESS,
-      data: {
-        user: user,
-        token: "generated-jwt-token"
-      }
+      data: user
     });
   } catch (error) {
     await logError(error, req);
@@ -39,16 +35,14 @@ async function loginUser(req, res) {
 
 async function logoutUser(req, res) {
   try {
-    // Logic for logging out the user (e.g., clearing session or token)
     responseHandler.success(res, {
+      success: true,
       statusCode: CODE.SUCCESS,
       message: AUTH_MESSAGES.LOGOUT_SUCCESS
     });
   } catch (error) {
-    responseHandler.error(res, {
-      message: error.message || AUTH_MESSAGES.LOGOUT_FAILURE,
-      statusCode: CODE.INTERNAL_ERROR
-    });
+    await logError(error, req);
+    responseHandler.error(res, error);
   }
 }
 

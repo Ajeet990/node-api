@@ -39,3 +39,13 @@ model ErrorLog {
   createdAt   DateTime @default(now())
 }
 
+model InvalidatedToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime  // When the token would naturally expire
+  userId    Int      // Reference to user
+  createdAt DateTime @default(now())
+
+  @@index([userId])  // Faster querying by user
+}
+

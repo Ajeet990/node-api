@@ -15,11 +15,11 @@ import {
 import responseHandler from '../utils/responseHandler.js';
 import { USER_MESSAGES } from "../config/messages/userMessages.js";
 import { CODE } from "../config/statusCodes/codes.js";
+import { logError } from "../services/error/errorLogService.js";
 
 async function createUser(req, res) {
   try {
     const validatedData = await createUserSchema.parseAsync(req.body);
-    // Check if user with the same email already exists
     const throwErrorIfNotFound = false;
     const existingUser = await getUserByEmailService(validatedData.email, throwErrorIfNotFound);
     if (existingUser) {
@@ -35,6 +35,7 @@ async function createUser(req, res) {
       data: user
     });
   } catch (error) {
+    await logError(error, req)
     responseHandler.error(res, error);
   }
 }
@@ -48,11 +49,8 @@ async function getUser(req, res) {
       data: user
     });
   } catch (error) {
-    responseHandler.error(res, {
-      message: error.message || USER_MESSAGES.INTERNAL_SERVER_ERROR,
-      details: error.details,
-      statusCode: CODE.NOT_FOUND
-    });
+    await logError(error, req)
+    responseHandler.error(res, error)
   }
 }
 
@@ -65,11 +63,8 @@ async function getUsers(req, res) {
       data: users
     });
   } catch (error) {
-    responseHandler.error(res, {
-      message: error.message || USER_MESSAGES.INTERNAL_SERVER_ERROR,
-      details: error.details,
-      statusCode: CODE.INTERNAL_ERROR
-    });
+    await logError(error, req)
+    responseHandler.error(res, error)
   }
 }
 
@@ -103,6 +98,7 @@ async function updateUser(req, res) {
     });
 
   } catch (error) {
+    await logError(error, req)
     responseHandler.error(res, error);
   }
 }
@@ -123,6 +119,7 @@ async function deleteUser(req, res) {
       message: USER_MESSAGES.USER_DELETED
     });
   } catch (error) {
+    await logError(error, req)
     responseHandler.error(res, error);
   }
 }

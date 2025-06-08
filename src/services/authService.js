@@ -1,9 +1,10 @@
-import { 
+import {
     login,
     createUser as createUserRepository
 } from "../repositories/authRepository.js";
 import { getUserByEmail } from "./userService.js";
 import { AUTH_MESSAGES } from "../config/messages/authMessages.js";
+import { generateToken } from "../utils/auth.js";
 
 async function createUser(userData) {
     const existingUser = await getUserByEmail(userData.email, false);
@@ -13,12 +14,27 @@ async function createUser(userData) {
     return await createUserRepository(userData);
 }
 
+// async function loginUser(userData) {
+//     const user = await login(userData.email, userData.password);
+//     return user;
+// }
 async function loginUser(userData) {
-  const user = await login(userData.email, userData.password);
-  return user;
+    const user = await login(userData.email, userData.password);
+    const { password, ...userWithoutPassword } = user;
+
+    const token = generateToken({
+        userId: user.id,
+        email: user.email,
+        role: user.role || 'user'
+    });
+
+    return {
+        user: userWithoutPassword,
+        token
+    };
 }
 
 export {
-  loginUser,
-  createUser
+    loginUser,
+    createUser
 };
