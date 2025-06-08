@@ -1,0 +1,6 @@
+mkdir node-api
+cd node-api
+npm init -y
+npm install express @prisma/client zod bcrypt
+npm install --save-dev nodemon prisma
+npx prisma init --datasource-provider mysql
