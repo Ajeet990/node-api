@@ -41,11 +41,12 @@ model ErrorLog {
 
 model InvalidatedToken {
   id        Int      @id @default(autoincrement())
-  token     String   @unique
+  token     String   @db.Text
   expiresAt DateTime  // When the token would naturally expire
   userId    Int      // Reference to user
   createdAt DateTime @default(now())
 
   @@index([userId])  // Faster querying by user
+  @@unique([token(length: 255)]) // MySQL requires length for unique index on TEXT
 }
 

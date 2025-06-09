@@ -1,6 +1,7 @@
 mkdir node-api
 cd node-api
 npm init -y
-npm install express @prisma/client zod bcrypt passport passport-jwt jsonwebtoken
+npm install express @prisma/client zod bcrypt passport passport-jwt jsonwebtoken express-rate-limit cors
+npm install swagger-jsdoc swagger-ui-express yamljs
 npm install --save-dev nodemon prisma
 npx prisma init --datasource-provider mysql

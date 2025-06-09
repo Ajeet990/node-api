@@ -56,6 +56,8 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
   try {
+    const currentUser = req.user;
+    // console.log('Current User:', currentUser);
     const users = await getAllUsersService();
     responseHandler.success(res, {
       statusCode: CODE.SUCCESS,

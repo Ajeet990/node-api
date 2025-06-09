@@ -1,0 +1,5 @@
+API documentation: using swagger/OpenAPI
+
+Docker: Add Docker support for consistent environments
+
+CI/CD: Set up basic CI/CD pipeline

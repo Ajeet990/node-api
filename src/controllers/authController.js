@@ -10,6 +10,7 @@ import responseHandler from '../utils/responseHandler.js';
 import { CODE } from "../config/statusCodes/codes.js";
 import { AUTH_MESSAGES } from "../config/messages/authMessages.js";
 import { logError } from "../services/error/errorLogService.js";
+import { invalidateToken } from "../services/tokenService.js";
 
 async function loginUser(req, res) {
   try {
@@ -33,18 +34,24 @@ async function loginUser(req, res) {
   }
 }
 
+// const logoutUser = async (req, res) => {
 async function logoutUser(req, res) {
   try {
-    responseHandler.success(res, {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) throw new Error(AUTH_MESSAGES.TOKEN_REQUIRED);
+
+    await invalidateToken(token); // Add to blacklist
+
+    res.status(200).json({ 
       success: true,
       statusCode: CODE.SUCCESS,
       message: AUTH_MESSAGES.LOGOUT_SUCCESS
     });
   } catch (error) {
     await logError(error, req);
-    responseHandler.error(res, error);
+    res.status(400).json({ success: false, message: error.message });
   }
-}
+};
 
 async function registerUser(req, res) {
   try {

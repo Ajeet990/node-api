@@ -4,7 +4,8 @@ import {
 } from "../repositories/authRepository.js";
 import { getUserByEmail } from "./userService.js";
 import { AUTH_MESSAGES } from "../config/messages/authMessages.js";
-import { generateToken } from "../utils/auth.js";
+// import { generateToken } from "../utils/auth.js";
+import { generateToken } from "./tokenService.js";
 
 async function createUser(userData) {
     const existingUser = await getUserByEmail(userData.email, false);
@@ -25,7 +26,7 @@ async function loginUser(userData) {
     const token = generateToken({
         userId: user.id,
         email: user.email,
-        role: user.role || 'user'
+        role: user.name
     });
 
     return {

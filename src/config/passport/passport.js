@@ -1,9 +1,6 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-// import { prisma } from './connection/db.js';
-// import { prisma } from '../config/connection/db.js';
 import { prisma } from '../connection/db.js';
-// import { JWT_SECRET } from './constants.js';
 import { JWT_SECRET } from '../constants.js';
 
 const jwtOptions = {
@@ -15,7 +12,7 @@ passport.use(new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: jwtPayload.userId },
-      select: { id: true, email: true } // Never return password
+      select: { id: true, email: true, name: true }
     });
     
     if (user) {

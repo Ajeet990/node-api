@@ -15,4 +15,6 @@ export const AUTH_MESSAGES = {
     INVALID_CREDENTIALS: 'Invalid credentials provided',
     TOKEN_EXPIRED: 'Token has expired, please log in again',
     TOKEN_INVALID: 'Invalid token provided',
+    TOKEN_REQUIRED: 'Token is required for this action',
+    TOO_MANY_REQUESTS: 'Too many requests, please try again later',
 };
